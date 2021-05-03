@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curise Booking</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@400;500;700&display=swap"
+        rel="stylesheet">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" rel="stylesheet" />
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+    <!--Header and Menu Section-->
+    <header class="container">
+        <nav>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">About Us</a></li>
+                <li><a href="#">Contact</a></li>
+                <li><a class="active" href="#">Sign Up</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!--Booking Section-->
+    <main class="main-content container">
+
+        <div class="booking-content">
+            <h1>Cruise Queen</h1>
+            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+                industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and
+                scrambled it to make a type specimen book./p>
+        </div>
+
+
+        <div class="booking-form">
+            <h3>Book Ocean Time</h3>
+            <div class="input-group">
+                <label for="">Flying From</label>
+                <input class="inp-style" type="text" name="" placeholder="Dhake, Bangladesh">
+            </div>
+            <div class="input-group">
+                <label for="">Flying To</label>
+                <input class="inp-style" type="text" name="" placeholder="New York, United States">
+            </div>
+            <div class="inputs">
+                <div class="input-group">
+                    <label" for="">Departure</label>
+                        <input class="inp-style" type="date" name="">
+                </div>
+                <div class="input-group">
+                    <label for="">Return</label>
+                    <input class="inp-style" type="date" name="">
+                </div>
+            </div>
+            <div class="input-group f-class">
+                <div>
+                    <label for="">First Class ($150)</label>
+                    <input id="first-count" class="inp-style inp-width" type="number" value="0" name="">
+                </div>
+                <div class="plus-minus-btn">
+                    <button onclick="ticketChange('first', true);" class="btn btn-default"><i
+                            class="fas fa-plus"></i></button>
+                    <button onclick="ticketChange('first', false);" class="btn btn-default"><i
+                            class="fas fa-minus"></i></button>
+                </div>
+            </div>
+
+            <div class="input-group f-class">
+                <div>
+                    <label for="">Economy Class ($100)</label>
+                    <input id="economy-count" class="inp-style inp-width" type="number" value="0" name="">
+                </div>
+                <div class="plus-minus-btn">
+                    <button onclick="ticketChange('economy', true)" class="btn btn-default"><i
+                            class="fas fa-plus"></i></button>
+                    <button onclick="ticketChange('economy', false)" class="btn btn-default"><i
+                            class="fas fa-minus"></i></button>
+                </div>
+            </div>
+            <div class="calculations">
+
+                <div class="firstIn">
+                    <p id="first-total">$150</p>
+                </div>
+                <div class="economyIn">
+                    <p id="economy-total">$100</p>
+                </div>
+
+                <div class="amount">
+                    <div class="left">
+                        <p>Subtotal</p>
+                    </div>
+                    <div class="right">
+                        <p id="total-Price">$0</p>
+                    </div>
+                </div>
+
+                <div class="amount">
+                    <div class="left">
+                        <p>Charge 10% VAT</p>
+                    </div>
+                    <div class="right">
+                        <p id="tax-amount">$0</p>
+                    </div>
+                </div>
+                <hr>
+                <div class="amount">
+                    <div class="left">
+                        <h4>Total</h4>
+                    </div>
+                    <div class="right">
+                        <p id="grand-total">$0</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="Book-Now-area">
+                <button class="btn-style" type="button" id="btn-modal">Book Now</button>
+
+                <div class="overlay" id="overlay"></div>
+                <div class="modal" id="modal">
+                    <button class="modal-close-btn" id="close-btn"><i class="fa fa-times" title="閉じる"></i></button>
+                    <h2 style="text-align: center;">SUCCESSFUL!</h2>
+                    <br>
+                    <h3>Your seat has been Reserved</h3>
+                    <h3>...Thanks For Getting in Touch...</h3>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!--Thank You-->
+
+    <script>
+        //Increase & Decrease..>>
+        function ticketChange(ticketClass, isIncrease) {
+            const ticketClassInput = document.getElementById(ticketClass + "-count");
+            const ticketClassCount = getInputValue(ticketClass);
+            let ticketClassNewCount = ticketClassCount;
+
+            if (isIncrease == true) {
+                ticketClassNewCount = ticketClassCount + 1;
+            }
+            if (isIncrease == false && ticketClassCount > 0) {
+                ticketClassNewCount = ticketClassCount - 1;
+            }
+            ticketClassInput.value = ticketClassNewCount;
+            let ticketClassTotal = 0;
+            if (ticketClass == 'first') {
+                ticketClassTotal = ticketClassNewCount * 150;
+            }
+            if (ticketClass == 'economy') {
+                ticketClassTotal = ticketClassNewCount * 100;
+            }
+
+            document.getElementById(ticketClass + "-total").innerText = "$" + ticketClassTotal;
+            calculateTotal();
+        }
+
+        //Calculate part..>>
+        function calculateTotal() {
+            const firstCount = getInputValue('first');
+
+            const economyCount = getInputValue('economy');
+
+            const totalPrice = firstCount * 150 + economyCount * 100;
+            document.getElementById("total-Price").innerText = "$" + totalPrice;
+
+            const tax = Math.round(totalPrice * 0.1);
+            document.getElementById('tax-amount').innerText = "$" + tax;
+
+            const grandTotal = totalPrice + tax;
+            document.getElementById('grand-total').innerText = "$" + grandTotal;
+        }
+
+        function getInputValue(ticketClass) {
+            const ticketClassInput = document.getElementById(ticketClass + '-count');
+            const ticketClassCount = parseInt(ticketClassInput.value);
+            return ticketClassCount;
+        }
+
+        // BOOK NOW Button.........
+        document.getElementById('btn-modal').addEventListener('click', function () {
+            document.getElementById('overlay').classList.add('is-visible');
+            document.getElementById('modal').classList.add('is-visible');
+        });
+
+        document.getElementById('close-btn').addEventListener('click', function () {
+            document.getElementById('overlay').classList.remove('is-visible');
+            document.getElementById('modal').classList.remove('is-visible');
+        });
+        document.getElementById('overlay').addEventListener('click', function () {
+            document.getElementById('overlay').classList.remove('is-visible');
+            document.getElementById('modal').classList.remove('is-visible');
+        });
+
+    </script>
+</body>
+
+</html>
